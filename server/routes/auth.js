@@ -2,9 +2,12 @@ import express from 'express'
 
 const router = express.Router()
 
+//middlewares
+import { requireSignin, requireAdmin } from '../middlewares/auth.js'
 // controllers
-import { users } from '../controllers/auth.js'
+import { register, login } from '../controllers/auth.js'
 
-router.get('/users', users)
+router.post('/register', register)
+router.post('/login', login)
 
 export default router

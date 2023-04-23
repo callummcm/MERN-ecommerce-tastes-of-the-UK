@@ -1,7 +1,6 @@
 import mongoose from "mongoose"
-const { Schema } = mongoose
 
-const userSchema = new Schema({
+const userSchema = new mongoose.Schema({
   name: {
     type: String,
     trim: true,
@@ -16,8 +15,8 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true,
-    min: 6,
-    max: 64
+    minLength: 6,
+    maxLength: 64
   },
   admin: {
     type: Boolean,
