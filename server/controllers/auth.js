@@ -42,7 +42,6 @@ export const login = async (req, res) => {
     const { email, password } = req.body
 
     if (!email.trim()) return (res.json({ error: 'Email is required' }))
-    if (!password || password.length < 6) return (res.json({ error: 'Password must be at least 6 characters long' }))
 
     const user = await User.findOne({ email })
     if (!user) return (res.json({ error: 'That email is not currently registered' }))
