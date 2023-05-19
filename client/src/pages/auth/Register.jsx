@@ -16,12 +16,7 @@ const Register = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
-			const response = await axios.post(
-				`${import.meta.env.VITE_API}/register`,
-				{name, email, password}
-			)
-
-			console.log(response)
+			const response = await axios.post('/register', {name, email, password})
 
 			if (response.data?.error) toast.error(response.data.error)
 			else {

@@ -9,6 +9,10 @@ const AuthProvider = ({children}) => {
 		token: '',
 	})
 
+	// axios config
+	axios.defaults.baseURL = import.meta.env.VITE_API
+	axios.defaults.headers.common['authorization'] = auth?.token
+
 	useEffect(() => {
 		const data = localStorage.getItem('auth')
 		if (data) {

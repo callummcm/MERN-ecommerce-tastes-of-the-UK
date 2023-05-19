@@ -1,18 +1,22 @@
 import {useEffect, useState} from 'react'
-import {useNavigate} from 'react-router-dom'
+import {useNavigate, useLocation} from 'react-router-dom'
 import LoadingGIF from '../../images/loading.gif'
 
 const Loading = () => {
 	const [count, setCount] = useState(3)
 
 	const navigate = useNavigate()
+	const location = useLocation()
 
 	useEffect(() => {
 		const interval = setInterval(() => {
 			setCount((currentCount) => --currentCount)
 		}, 1000)
 		// redirect after count 0
-		count === 0 && navigate('/login')
+		count === 0 &&
+			navigate('/login', {
+				state: location.pathname,
+			})
 		// cleanup
 		return () => clearInterval(interval)
 	}, [count])

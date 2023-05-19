@@ -3,7 +3,7 @@ import Jumbotron from '../../components/cards/Jumbotron'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import {useAuth} from '../../context/auth'
-import {useNavigate} from 'react-router-dom'
+import {useNavigate, useLocation} from 'react-router-dom'
 
 const Login = () => {
 	const [email, setEmail] = useState('')
@@ -11,23 +11,22 @@ const Login = () => {
 
 	const [auth, setAuth] = useAuth()
 	const navigate = useNavigate()
+	const location = useLocation()
 
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
-			const response = await axios.post(`${import.meta.env.VITE_API}/login`, {
+			const response = await axios.post('/login', {
 				email,
 				password,
 			})
-
-			console.log(response)
 
 			if (response.data?.error) toast.error(response.data.error)
 			else {
 				localStorage.setItem('auth', JSON.stringify(response.data))
 				setAuth({...auth, token: response.data.token, user: response.data.user})
 				toast.success('Login successful')
-				navigate('/dashboard')
+				navigate(location.state || '/dashboard')
 			}
 		} catch (err) {
 			console.log(err)

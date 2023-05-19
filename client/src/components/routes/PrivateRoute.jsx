@@ -11,16 +11,12 @@ const PrivateRoute = () => {
 
 	useEffect(() => {
 		const authCheck = async () => {
-			const {data} = await axios.get(`${import.meta.env.VITE_API}/auth-check`, {
-				headers: {
-					authorization: auth?.token,
-				},
-			})
+			const {data} = await axios.get('/auth-check')
 			if (data.ok) setOk(true)
 			else setOk(false)
 		}
 
-		authCheck()
+		if (auth?.token) authCheck()
 	}, [auth?.token])
 
 	// useEffect(() => {

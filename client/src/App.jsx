@@ -13,6 +13,16 @@ import {
 } from 'react-router-dom'
 import {Toaster} from 'react-hot-toast'
 
+const PageNotFound = () => {
+	return (
+		<>
+			<h1 className='d-flex justify-content-center align-items-center vh-100'>
+				404 | Page Not Found
+			</h1>
+		</>
+	)
+}
+
 const App = () => {
 	return (
 		<>
@@ -26,6 +36,7 @@ const App = () => {
 					<Route path='/dashboard' element={<PrivateRoute />}>
 						<Route path='' element={<Dashboard />} />
 					</Route>
+					<Route path='*' element={<PageNotFound />} replace />
 				</Routes>
 			</BrowserRouter>
 		</>
