@@ -49,7 +49,7 @@ const Menu = () => {
 									<NavLink
 										className='nav-link'
 										to={`/dashboard/${
-											auth?.user?.admin === true ? 'admin' : 'user'
+											auth?.user?.admin === true ? 'admin' : ''
 										}`}
 									>
 										Dashboard

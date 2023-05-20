@@ -26,7 +26,12 @@ const Login = () => {
 				localStorage.setItem('auth', JSON.stringify(response.data))
 				setAuth({...auth, token: response.data.token, user: response.data.user})
 				toast.success('Login successful')
-				navigate(location.state || '/dashboard')
+				navigate(
+					location.state ||
+						`/dashboard/${
+							response.data?.user?.admin === true ? 'admin' : 'user'
+						}`
+				)
 			}
 		} catch (err) {
 			console.log(err)

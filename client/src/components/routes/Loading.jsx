@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react'
 import {useNavigate, useLocation} from 'react-router-dom'
 import LoadingGIF from '../../images/loading.gif'
 
-const Loading = () => {
+const Loading = ({path = 'login'}) => {
 	const [count, setCount] = useState(3)
 
 	const navigate = useNavigate()
@@ -14,7 +14,7 @@ const Loading = () => {
 		}, 1000)
 		// redirect after count 0
 		count === 0 &&
-			navigate('/login', {
+			navigate(`/${path}`, {
 				state: location.pathname,
 			})
 		// cleanup

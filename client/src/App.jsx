@@ -4,7 +4,9 @@ import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
 import Menu from './components/nav/Menu'
 import Dashboard from './pages/user/Dashboard'
+import AdminDashboard from './pages/admin/Dashboard'
 import PrivateRoute from './components/routes/PrivateRoute'
+import AdminRoute from './components/routes/AdminRoute'
 import {
 	BrowserRouter as Router,
 	Routes,
@@ -35,6 +37,9 @@ const App = () => {
 					<Route path='/register' element={<Register />} />
 					<Route path='/dashboard' element={<PrivateRoute />}>
 						<Route path='' element={<Dashboard />} />
+					</Route>
+					<Route path='/dashboard' element={<AdminRoute />}>
+						<Route path='admin' element={<AdminDashboard />} />
 					</Route>
 					<Route path='*' element={<PageNotFound />} replace />
 				</Routes>
