@@ -2,7 +2,7 @@ import './App.css'
 import Home from './pages/Home'
 import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
-import Menu from './components/nav/Menu'
+import Navbar from './components/nav/Navbar'
 import Dashboard from './pages/user/Dashboard'
 import AdminDashboard from './pages/admin/Dashboard'
 import PrivateRoute from './components/routes/PrivateRoute'
@@ -30,7 +30,7 @@ const App = () => {
 		<>
 			<BrowserRouter>
 				<Toaster />
-				<Menu />
+				<Navbar />
 				<Routes>
 					<Route path='/' element={<Home />} />
 					<Route path='/login' element={<Login />} />

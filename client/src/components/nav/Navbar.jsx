@@ -2,7 +2,7 @@ import {NavLink, useNavigate} from 'react-router-dom'
 import {useAuth} from '../../context/auth'
 import toast from 'react-hot-toast'
 
-const Menu = () => {
+const Navbar = () => {
 	const [auth, setAuth] = useAuth()
 	const navigate = useNavigate()
 
@@ -69,4 +69,4 @@ const Menu = () => {
 	)
 }
 
-export default Menu
+export default Navbar

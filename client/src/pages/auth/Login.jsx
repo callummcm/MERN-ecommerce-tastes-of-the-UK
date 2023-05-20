@@ -28,9 +28,7 @@ const Login = () => {
 				toast.success('Login successful')
 				navigate(
 					location.state ||
-						`/dashboard/${
-							response.data?.user?.admin === true ? 'admin' : 'user'
-						}`
+						`/dashboard/${response.data?.user?.admin === true ? 'admin' : ''}`
 				)
 			}
 		} catch (err) {
