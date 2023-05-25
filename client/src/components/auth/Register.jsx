@@ -16,12 +16,12 @@ const Register = ({closeModal}) => {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
-			const response = await axios.post('/register', {name, email, password})
+			const {data} = await axios.post('/register', {name, email, password})
 
-			if (response.data?.error) toast.error(response.data.error)
+			if (data?.error) toast.error(data.error)
 			else {
-				localStorage.setItem('auth', JSON.stringify(response.data))
-				setAuth({...auth, token: response.data.token, user: response.data.user})
+				localStorage.setItem('auth', JSON.stringify(data))
+				setAuth({...auth, token: data.token, user: data.user})
 				toast.success('Registration successful')
 				closeModal('register')
 				navigate('/')
@@ -34,7 +34,7 @@ const Register = ({closeModal}) => {
 
 	return (
 		<>
-			<Jumbotron title='Register' subtitle='Welcome' />
+			<Jumbotron title='Register' />
 			<div className='container mt-5'>
 				<div className='row'>
 					<div className='col-md-6' style={{minWidth: '100%'}}>

@@ -32,9 +32,7 @@ const Dashboard = () => {
 					<div className='col-md-9'>
 						{showUserInfo && (
 							<>
-								<div className='p-3 mt-2 mb-2 h4 bg-light text-center'>
-									User Info
-								</div>
+								<div className='p-3 mt-2 mb-2 h4 bg-light'>User Info</div>
 								<ul className='list-group'>
 									<li className='list-group-item'>{auth?.user?.name}</li>
 									<li className='list-group-item'>{auth?.user?.email}</li>

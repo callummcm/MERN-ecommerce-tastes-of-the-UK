@@ -3,8 +3,8 @@ import React from 'react'
 const OrderHistory = () => {
 	return (
 		<>
-			<div className='p-3 mt-2 mb-2 h4 bg-light text-center'>Order History</div>
-			<div>order history</div>
+			<div className='p-3 mt-2 mb-2 h4 bg-light'>Order History</div>
+			<div className='p-3'>order history</div>
 		</>
 	)
 }

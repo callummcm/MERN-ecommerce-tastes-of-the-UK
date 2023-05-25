@@ -1,16 +1,16 @@
 import {NavLink, useNavigate} from 'react-router-dom'
 import {useAuth} from '../../context/auth'
 import toast from 'react-hot-toast'
-import {useEffect, useRef} from 'react'
+import {useEffect, useRef, useState} from 'react'
 import Login from '../auth/Login'
 import Register from '../auth/Register'
+import {Modal} from 'antd'
 
 const Navbar = () => {
 	const [auth, setAuth] = useAuth()
+	const [showLoginModal, setShowLoginModal] = useState(false)
+	const [showRegisterModal, setShowRegisterModal] = useState(false)
 	const navigate = useNavigate()
-
-	const loginModalRef = useRef()
-	const registerModalRef = useRef()
 
 	const handleLogout = () => {
 		setAuth({...auth, user: null, token: ''})
@@ -19,52 +19,13 @@ const Navbar = () => {
 		toast('You have been logged out')
 	}
 
-	const handleShowModal = (modalToShow) => {
-		if (modalToShow === 'login') loginModalRef.current.showModal()
-		else registerModalRef.current.showModal()
+	const handleCloseLoginModel = () => {
+		setShowLoginModal(false)
 	}
 
-	const handleCloseModal = (modalToClose) => {
-		if (modalToClose === 'login') loginModalRef.current.close()
-		else registerModalRef.current.close()
+	const handleCloseRegisterModel = () => {
+		setShowRegisterModal(false)
 	}
-
-	useEffect(() => {
-		const loginModalHandler = (e) => {
-			const loginModalDimensions = loginModalRef.current.getBoundingClientRect()
-			if (
-				e.clientX < loginModalDimensions.left ||
-				e.clientX > loginModalDimensions.right ||
-				e.clientY < loginModalDimensions.top ||
-				e.clientY > loginModalDimensions.bottom
-			) {
-				handleCloseModal('login')
-			}
-		}
-		const registerModalHandler = (e) => {
-			const registerModalDimensions =
-				registerModalRef.current.getBoundingClientRect()
-			if (
-				e.clientX < registerModalDimensions.left ||
-				e.clientX > registerModalDimensions.right ||
-				e.clientY < registerModalDimensions.top ||
-				e.clientY > registerModalDimensions.bottom
-			) {
-				handleCloseModal('register')
-			}
-		}
-
-		loginModalRef.current.addEventListener('click', loginModalHandler)
-		registerModalRef.current.addEventListener('click', registerModalHandler)
-
-		return () => {
-			loginModalRef.current.removeEventListener('click', loginModalHandler)
-			registerModalRef.current.removeEventListener(
-				'click',
-				registerModalHandler
-			)
-		}
-	}, [])
 
 	return (
 		<>
@@ -75,12 +36,23 @@ const Navbar = () => {
 					</NavLink>
 				</li>
 
-				<dialog ref={loginModalRef} style={{minWidth: '35%'}}>
-					<Login closeModal={handleCloseModal} />
-				</dialog>
-				<dialog ref={registerModalRef} style={{minWidth: '35%'}}>
-					<Register closeModal={handleCloseModal} />
-				</dialog>
+				<Modal
+					open={showLoginModal}
+					onOk={handleCloseLoginModel}
+					onCancel={handleCloseLoginModel}
+					footer={null}
+				>
+					<Login closeModal={handleCloseLoginModel} />
+				</Modal>
+
+				<Modal
+					open={showRegisterModal}
+					onOk={handleCloseRegisterModel}
+					onCancel={handleCloseRegisterModel}
+					footer={null}
+				>
+					<Register closeModal={handleCloseRegisterModel} />
+				</Modal>
 
 				{!auth?.user ? (
 					<>
@@ -88,7 +60,7 @@ const Navbar = () => {
 							<button
 								className='nav-link'
 								aria-current='page'
-								onClick={() => handleShowModal('login')}
+								onClick={() => setShowLoginModal(true)}
 							>
 								LOGIN
 							</button>
@@ -97,7 +69,7 @@ const Navbar = () => {
 							<button
 								className='nav-link'
 								aria-current='page'
-								onClick={() => handleShowModal('register')}
+								onClick={() => setShowRegisterModal(true)}
 							>
 								REGISTER
 							</button>

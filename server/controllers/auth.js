@@ -47,7 +47,6 @@ export const login = async (req, res) => {
     if (!user) return (res.json({ error: 'That email is not currently registered' }))
 
     const checkPassword = await comparePassword(password, user.password)
-    console.log(checkPassword);
     if (!checkPassword) return (res.json({ error: 'Incorrect password' }))
 
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '30d' })

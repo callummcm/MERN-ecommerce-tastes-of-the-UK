@@ -16,20 +16,20 @@ const Login = ({closeModal}) => {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
-			const response = await axios.post('/login', {
+			const {data} = await axios.post('/login', {
 				email,
 				password,
 			})
 
-			if (response.data?.error) toast.error(response.data.error)
+			if (data?.error) toast.error(response.error)
 			else {
-				localStorage.setItem('auth', JSON.stringify(response.data))
-				setAuth({...auth, token: response.data.token, user: response.data.user})
+				localStorage.setItem('auth', JSON.stringify(data))
+				setAuth({...auth, token: data.token, user: data.user})
 				toast.success('Login successful')
 				closeModal('login')
 				navigate(
 					location.state ||
-						`/dashboard/${response.data?.user?.admin === true ? 'admin' : ''}`
+						`/dashboard/${data?.user?.admin === true ? 'admin' : ''}`
 				)
 			}
 		} catch (err) {
@@ -40,7 +40,7 @@ const Login = ({closeModal}) => {
 
 	return (
 		<>
-			<Jumbotron title='Login' subtitle='Welcome' />
+			<Jumbotron title='Login' />
 			<div className='container mt-5'>
 				<div className='row '>
 					<div className='col-md-6' style={{minWidth: '100%'}}>

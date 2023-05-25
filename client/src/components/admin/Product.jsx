@@ -3,10 +3,8 @@ import React from 'react'
 const Product = () => {
 	return (
 		<>
-			<div className='p-3 mt-2 mb-2 h4 bg-light text-center'>
-				Manage Products
-			</div>
-			<div>Create products form...</div>
+			<div className='p-3 mt-2 mb-2 h4 bg-light'>Manage Products</div>
+			<div className='p-3'>Create products form...</div>
 		</>
 	)
 }

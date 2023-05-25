@@ -9,7 +9,7 @@ const AdminMenu = ({setShowAdminInfo, setManageProduct, setManageCategory}) => {
 
 	return (
 		<>
-			<div className='p-3 mt-2 mb-2 h4 bg-light text-center'>Admin Links</div>
+			<div className='p-3 mt-2 mb-2 h4 bg-light'>Admin Links</div>
 			<ul className='list-group'>
 				<li
 					className='list-group-item pointer list-group-item-action'
