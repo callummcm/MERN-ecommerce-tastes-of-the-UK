@@ -6,7 +6,6 @@ export const create = async (req, res) => {
   try {
 
     const { name } = req.body
-    console.log(req.body);
 
     if (!name.trim()) return res.json({ error: 'Name is required' })
 

@@ -11,34 +11,65 @@ const productSchema = new mongoose.Schema({
     type: String,
     lowercase: true
   },
+  shortDescription: {
+    type: String,
+    required: false
+  },
   description: {
     type: String,
-    required: true
+    required: false
   },
   price: {
     type: Number,
     trim: true,
+    required: false
+  },
+  inStock: {
+    type: Boolean,
+    default: false,
     required: true
+  },
+  parent: {
+    type: String,
+    required: false
+  },
+  isFeatured: {
+    type: Number,
+    default: 0
+  },
+  weight: {
+    type: Number,
+    default: 0,
+  },
+  tags: {
+    type: String,
+    required: false,
   },
   category: {
     type: ObjectId,
     ref: 'Category',
     required: true,
-    quantity: {
-      type: Number
-    },
   },
-  sold: {
+  quantity: {
     type: Number,
     default: 0
   },
-  photo: {
+  image: {
     data: Buffer,
     contentType: String
   },
-  shipping: {
+  flavour: {
+    type: String,
+    required: false
+  },
+  dated: {
+    type: String,
     required: false,
-    type: Boolean
+    default: "No"
+  },
+  size: {
+    type: String,
+    required: false
   }
 }, { timestamps: true })
 

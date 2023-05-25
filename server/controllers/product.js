@@ -5,16 +5,37 @@ import fs from 'fs'
 export const create = async (req, res) => {
   try {
 
-    const { name, description, price, category, quantity, shipping } = req.fields
+    const {
+      name,
+      description,
+      shortDescription,
+      price,
+      category,
+      quantity,
+      inStock,
+      isFeatured,
+      tags,
+      weight,
+      flavour,
+      dated,
+      size
+    } = req.fields
     const { photo } = req.files
 
     switch (true) {
       case !name.trim(): res.json({ error: 'Name is required' })
-      case !description.trim(): res.json({ error: 'Description is required' })
+      //case !description.trim(): res.json({ error: 'Description is required' })
+      //case !shortDescription.trim(): res.json({ error: 'Short description is required' })
       case !price.trim(): res.json({ error: 'Price is required' })
       case !category.trim(): res.json({ error: 'Category is required' })
-      case !quantity.trim(): res.json({ error: 'Quantity is required' })
-      case !shipping.trim(): res.json({ error: 'Shipping is required' })
+      //case !quantity.trim(): res.json({ error: 'Quantity is required' })
+      //case !inStock.trim(): res.json({ error: 'Shipping is required' })
+      //case !isFeatured.trim(): res.json({ error: 'Featured is required' })
+      //case !tags.trim(): res.json({ error: 'Tags are required' })
+      //case !weight.trim(): res.json({ error: 'Weight is required' })
+      //case !flavour.trim(): res.json({ error: 'Flavour is required' })
+      //case !dated.trim(): res.json({ error: 'Dated is required' })
+      //case !size.trim(): res.json({ error: 'Size is required' })
       case photo && photo.size > 1000000: res.json({ error: 'Image should be less than 1mb in size' })
     }
 
@@ -42,6 +63,20 @@ export const list = async (req, res) => {
       .select('-photo')
       .limit(12)
       .sort({ createdAt: -1 })
+
+    res.json(products)
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export const listAll = async (req, res) => {
+  try {
+
+    const projection = { _id: 1, Name: 1 }
+
+    const products = await Product.find({})
+      .sort({ Name: 1 })
 
     res.json(products)
   } catch (err) {
