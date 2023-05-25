@@ -33,8 +33,10 @@ const App = () => {
 				<Navbar />
 				<Routes>
 					<Route path='/' element={<Home />} />
+					{/* Using modal, restore this if modal is removed
+					Also remove pages/auth/login&register later
 					<Route path='/login' element={<Login />} />
-					<Route path='/register' element={<Register />} />
+					<Route path='/register' element={<Register />} /> */}
 					<Route path='/dashboard' element={<PrivateRoute />}>
 						<Route path='' element={<Dashboard />} />
 					</Route>

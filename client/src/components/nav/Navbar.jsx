@@ -1,10 +1,16 @@
 import {NavLink, useNavigate} from 'react-router-dom'
 import {useAuth} from '../../context/auth'
 import toast from 'react-hot-toast'
+import {useEffect, useRef} from 'react'
+import Login from '../auth/Login'
+import Register from '../auth/Register'
 
 const Navbar = () => {
 	const [auth, setAuth] = useAuth()
 	const navigate = useNavigate()
+
+	const loginModalRef = useRef()
+	const registerModalRef = useRef()
 
 	const handleLogout = () => {
 		setAuth({...auth, user: null, token: ''})
@@ -12,6 +18,53 @@ const Navbar = () => {
 		navigate('')
 		toast('You have been logged out')
 	}
+
+	const handleShowModal = (modalToShow) => {
+		if (modalToShow === 'login') loginModalRef.current.showModal()
+		else registerModalRef.current.showModal()
+	}
+
+	const handleCloseModal = (modalToClose) => {
+		if (modalToClose === 'login') loginModalRef.current.close()
+		else registerModalRef.current.close()
+	}
+
+	useEffect(() => {
+		const loginModalHandler = (e) => {
+			const loginModalDimensions = loginModalRef.current.getBoundingClientRect()
+			if (
+				e.clientX < loginModalDimensions.left ||
+				e.clientX > loginModalDimensions.right ||
+				e.clientY < loginModalDimensions.top ||
+				e.clientY > loginModalDimensions.bottom
+			) {
+				handleCloseModal('login')
+			}
+		}
+		const registerModalHandler = (e) => {
+			const registerModalDimensions =
+				registerModalRef.current.getBoundingClientRect()
+			if (
+				e.clientX < registerModalDimensions.left ||
+				e.clientX > registerModalDimensions.right ||
+				e.clientY < registerModalDimensions.top ||
+				e.clientY > registerModalDimensions.bottom
+			) {
+				handleCloseModal('register')
+			}
+		}
+
+		loginModalRef.current.addEventListener('click', loginModalHandler)
+		registerModalRef.current.addEventListener('click', registerModalHandler)
+
+		return () => {
+			loginModalRef.current.removeEventListener('click', loginModalHandler)
+			registerModalRef.current.removeEventListener(
+				'click',
+				registerModalHandler
+			)
+		}
+	}, [])
 
 	return (
 		<>
@@ -22,17 +75,32 @@ const Navbar = () => {
 					</NavLink>
 				</li>
 
+				<dialog ref={loginModalRef} style={{minWidth: '35%'}}>
+					<Login closeModal={handleCloseModal} />
+				</dialog>
+				<dialog ref={registerModalRef} style={{minWidth: '35%'}}>
+					<Register closeModal={handleCloseModal} />
+				</dialog>
+
 				{!auth?.user ? (
 					<>
 						<li className='nav-item'>
-							<NavLink className='nav-link' to='/login'>
+							<button
+								className='nav-link'
+								aria-current='page'
+								onClick={() => handleShowModal('login')}
+							>
 								LOGIN
-							</NavLink>
+							</button>
 						</li>
 						<li className='nav-item'>
-							<NavLink className='nav-link' to='/register'>
+							<button
+								className='nav-link'
+								aria-current='page'
+								onClick={() => handleShowModal('register')}
+							>
 								REGISTER
-							</NavLink>
+							</button>
 						</li>
 					</>
 				) : (
