@@ -2,15 +2,17 @@ import {useAuth} from '../../context/auth'
 import Jumbotron from '../../components/cards/Jumbotron'
 import AdminMenu from '../../components/nav/AdminMenu'
 import {useState} from 'react'
-import AdminProduct from '../../components/admin/Product'
-import AdminCategory from '../../components/admin/Category'
+import CreateProduct from '../../components/admin/CreateProduct'
+import ManageProducts from '../../components/admin/ManageProducts'
+import Category from '../../components/admin/Category'
 
 const Dashboard = () => {
 	const [auth, setAuth] = useAuth()
 
 	//state for admin Links
 	const [showAdminInfo, setShowAdminInfo] = useState(true)
-	const [manageProduct, setManageProduct] = useState(false)
+	const [createProduct, setCreateProduct] = useState(false)
+	const [manageProducts, setManageProducts] = useState(false)
 	const [manageCategory, setManageCategory] = useState(false)
 
 	return (
@@ -25,7 +27,8 @@ const Dashboard = () => {
 					<div className='col-md-3'>
 						<AdminMenu
 							setShowAdminInfo={setShowAdminInfo}
-							setManageProduct={setManageProduct}
+							setCreateProduct={setCreateProduct}
+							setManageProducts={setManageProducts}
 							setManageCategory={setManageCategory}
 						/>
 					</div>
@@ -42,16 +45,9 @@ const Dashboard = () => {
 								</ul>
 							</>
 						)}
-						{manageProduct && (
-							<>
-								<AdminProduct />
-							</>
-						)}
-						{manageCategory && (
-							<>
-								<AdminCategory />
-							</>
-						)}
+						{createProduct && <CreateProduct />}
+						{manageProducts && <ManageProducts />}
+						{manageCategory && <Category />}
 					</div>
 				</div>
 			</div>

@@ -1,9 +1,15 @@
 import {NavLink} from 'react-router-dom'
 
-const AdminMenu = ({setShowAdminInfo, setManageProduct, setManageCategory}) => {
+const AdminMenu = ({
+	setShowAdminInfo,
+	setCreateProduct,
+	setManageProducts,
+	setManageCategory,
+}) => {
 	const handleItemClick = (itemName) => {
 		setShowAdminInfo(itemName === 'adminInfo' ? true : false)
-		setManageProduct(itemName === 'manageProduct' ? true : false)
+		setCreateProduct(itemName === 'createProduct' ? true : false)
+		setManageProducts(itemName === 'manageProducts' ? true : false)
 		setManageCategory(itemName === 'manageCategory' ? true : false)
 	}
 
@@ -19,15 +25,21 @@ const AdminMenu = ({setShowAdminInfo, setManageProduct, setManageCategory}) => {
 				</li>
 				<li
 					className='list-group-item pointer list-group-item-action'
-					onClick={() => handleItemClick('manageProduct')}
+					onClick={() => handleItemClick('createProduct')}
 				>
 					Create product
 				</li>
 				<li
 					className='list-group-item pointer list-group-item-action'
+					onClick={() => handleItemClick('manageProducts')}
+				>
+					Manage products
+				</li>
+				<li
+					className='list-group-item pointer list-group-item-action'
 					onClick={() => handleItemClick('manageCategory')}
 				>
-					Create category
+					Create/Manage categories
 				</li>
 			</ul>
 		</>

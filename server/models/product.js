@@ -5,15 +5,11 @@ const productSchema = new mongoose.Schema({
   name: {
     type: String,
     trim: true,
-    required: true
+    required: true,
   },
   slug: {
     type: String,
     lowercase: true
-  },
-  shortDescription: {
-    type: String,
-    required: false
   },
   description: {
     type: String,
@@ -22,37 +18,30 @@ const productSchema = new mongoose.Schema({
   price: {
     type: Number,
     trim: true,
-    required: false
+    required: true
   },
   inStock: {
     type: Boolean,
     default: false,
     required: true
   },
-  parent: {
-    type: String,
-    required: false
-  },
   isFeatured: {
     type: Number,
     default: 0
   },
-  weight: {
+  weightKg: {
     type: Number,
     default: 0,
+    required: true
   },
   tags: {
     type: String,
     required: false,
   },
-  category: {
+  categories: {
     type: ObjectId,
     ref: 'Category',
     required: true,
-  },
-  quantity: {
-    type: Number,
-    default: 0
   },
   image: {
     data: Buffer,
@@ -62,10 +51,10 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: false
   },
-  dated: {
-    type: String,
+  isDated: {
+    type: Number,
     required: false,
-    default: "No"
+    default: 0
   },
   size: {
     type: String,

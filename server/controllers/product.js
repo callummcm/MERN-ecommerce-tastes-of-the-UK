@@ -1,6 +1,7 @@
 import Product from '../models/product.js'
 import slugify from 'slugify'
 import fs from 'fs'
+import product from '../models/product.js'
 
 export const create = async (req, res) => {
   try {
@@ -8,47 +9,46 @@ export const create = async (req, res) => {
     const {
       name,
       description,
-      shortDescription,
       price,
-      category,
-      quantity,
+      categories,
       inStock,
       isFeatured,
       tags,
-      weight,
+      weightKg,
       flavour,
       dated,
       size
     } = req.fields
-    const { photo } = req.files
+    const { image } = req.files
 
     switch (true) {
-      case !name.trim(): res.json({ error: 'Name is required' })
+      case !name.trim(): return res.json({ error: 'Name is required' })
       //case !description.trim(): res.json({ error: 'Description is required' })
-      //case !shortDescription.trim(): res.json({ error: 'Short description is required' })
-      case !price.trim(): res.json({ error: 'Price is required' })
-      case !category.trim(): res.json({ error: 'Category is required' })
-      //case !quantity.trim(): res.json({ error: 'Quantity is required' })
-      //case !inStock.trim(): res.json({ error: 'Shipping is required' })
+      case !price.trim(): return res.json({ error: 'Price is required' })
+      case !categories.trim(): return res.json({ error: 'Category is required' })
+      case !inStock.trim(): return res.json({ error: 'In stock is required' })
       //case !isFeatured.trim(): res.json({ error: 'Featured is required' })
       //case !tags.trim(): res.json({ error: 'Tags are required' })
-      //case !weight.trim(): res.json({ error: 'Weight is required' })
+      case !weightKg.trim(): return res.json({ error: 'Weight is required' })
       //case !flavour.trim(): res.json({ error: 'Flavour is required' })
       //case !dated.trim(): res.json({ error: 'Dated is required' })
       //case !size.trim(): res.json({ error: 'Size is required' })
-      case photo && photo.size > 1000000: res.json({ error: 'Image should be less than 1mb in size' })
+      case image && image.size > 1000000: return res.json({ error: 'Image should be less than 1mb in size' })
     }
+
+    const existingProduct = await Product.findOne({ name })
+    if (existingProduct) return res.json({ error: 'Product already exists' })
 
     // create product
     const product = new Product({ ...req.fields, slug: slugify(name) })
 
-    if (photo) {
-      product.photo.data = fs.readFileSync(photo.path)
-      product.photo.contentType = photo.type
+    if (image) {
+      product.image.data = fs.readFileSync(image.path)
+      product.image.contentType = image.type
     }
 
     await product.save()
-    res.json(product)
+    return res.json(product)
   }
   catch (err) {
     console.log(err);
@@ -59,8 +59,8 @@ export const create = async (req, res) => {
 export const list = async (req, res) => {
   try {
     const products = await Product.find({})
-      .populate('category')
-      .select('-photo')
+      .populate('categories')
+      .select('-image')
       .limit(12)
       .sort({ createdAt: -1 })
 
@@ -73,10 +73,8 @@ export const list = async (req, res) => {
 export const listAll = async (req, res) => {
   try {
 
-    const projection = { _id: 1, Name: 1 }
-
     const products = await Product.find({})
-      .sort({ Name: 1 })
+      .sort({ name: 1 })
 
     res.json(products)
   } catch (err) {
@@ -88,8 +86,8 @@ export const read = async (req, res) => {
   try {
 
     const product = await Product.findOne({ slug: req.params.slug })
-      .select('-photo')
-      .populate('category')
+      .select('-image')
+      .populate('categories')
 
     res.json(product)
   } catch (err) {
@@ -97,15 +95,18 @@ export const read = async (req, res) => {
   }
 }
 
-export const photo = async (req, res) => {
+export const image = async (req, res) => {
   try {
 
     const product = await Product.findById(req.params.id)
-      .select('photo')
+      .select('image')
 
-    if (product.photo.data) {
-      res.set('Content-Type', product.photo.contentType)
-      return res.send(product.photo.data)
+    if (product.image.data) {
+      res.set('Content-Type', product.image.contentType)
+      return res.send(product.image.data)
+    }
+    else if (product.image !== null) {
+      return res.send(product.image)
     }
 
   } catch (err) {
@@ -117,7 +118,7 @@ export const remove = async (req, res) => {
   try {
 
     const product = await Product.findByIdAndDelete(req.params.id)
-      .select('-photo')
+      .select('-image')
 
     res.json(product)
 
@@ -129,36 +130,107 @@ export const remove = async (req, res) => {
 export const update = async (req, res) => {
   try {
 
-    const { name, description, price, category, quantity, shipping } = req.fields
-    const { photo } = req.files
+    const {
+      name,
+      description,
+      price,
+      categories,
+      inStock,
+      isFeatured,
+      tags,
+      weightKg,
+      flavour,
+      dated,
+      size
+    } = req.fields
+    const { image } = req.files
+
+    console.log(weightKg)
 
     switch (true) {
-      case !name.trim(): res.json({ error: 'Name is required' })
-      case !description.trim(): res.json({ error: 'Description is required' })
-      case !price.trim(): res.json({ error: 'Price is required' })
-      case !category.trim(): res.json({ error: 'Category is required' })
-      case !quantity.trim(): res.json({ error: 'Quantity is required' })
-      case !shipping.trim(): res.json({ error: 'Shipping is required' })
-      case photo && photo.size > 1000000: res.json({ error: 'Image should be less than 1mb in size' })
+      case !name.trim(): return res.json({ error: 'Name is required' })
+      //case !description.trim(): res.json({ error: 'Description is required' })
+      case !price.trim(): return res.json({ error: 'Price is required' })
+      case !categories.trim(): return res.json({ error: 'Category is required' })
+      case !inStock.trim(): return res.json({ error: 'In stock is required' })
+      //case !isFeatured.trim(): res.json({ error: 'Featured is required' })
+      //case !tags.trim(): res.json({ error: 'Tags are required' })
+      case !weightKg.trim(): return res.json({ error: 'Weight is required' })
+      //case !flavour.trim(): res.json({ error: 'Flavour is required' })
+      //case !dated.trim(): res.json({ error: 'Dated is required' })
+      //case !size.trim(): res.json({ error: 'Size is required' })
+      case image && image.size > 1000000: return res.json({ error: 'Image should be less than 1mb in size' })
     }
 
     // update product
+    //console.log(image)
     const product = await Product.findByIdAndUpdate(req.params.id, {
       ...req.fields,
       slug: slugify(name)
     }, { new: true })
 
-    if (photo) {
-      console.log(photo)
-      product.photo.data = fs.readFileSync(photo.path)
-      product.photo.contentType = photo.type
+    if (image) {
+      const newImage = {
+        data: fs.readFileSync(image.path),
+        contentType: image.type
+      };
+
+      product.image = newImage;
+    } else {
+      // If the image object already exists, update its properties
+      product.image.data = fs.readFileSync(image.path);
+      product.image.contentType = image.type;
     }
 
     await product.save()
-    res.json(product)
+    return res.json(product)
   }
   catch (err) {
     console.log(err);
     return res.status(400).json(err)
+  }
+}
+
+export const removeFields = async (req, res) => {
+  try {
+
+
+    const products = await Product.find({})
+
+    products.map(async (p) => {
+      try {
+        const response = await Product.updateOne(
+          { _id: p._id },
+          {
+            $set:
+            {
+              slug: slugify(p.name)
+            }
+          }
+        );
+      } catch (error) {
+        console.log(error)
+      }
+
+    })
+
+    console.log('attempting removal of fields')
+    // const response = await Product.updateOne(
+    //   { _id: '64719cbf1f8a9f22175bb295' },
+    //   {
+    //     $set:
+    //     {
+    //       slug: slugify(products.name)
+    //     }
+    //   }
+
+
+    // );
+    //Cheese and Onion, Yes
+
+    console.log(response)
+    return res.json(response)
+  } catch (error) {
+    console.log('Error:', error.message)
   }
 }
