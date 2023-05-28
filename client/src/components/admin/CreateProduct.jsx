@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import {Select} from 'antd'
 import toast from 'react-hot-toast'
-import ProductForm from '../forms/ProductForm'
 
 const {Option} = Select
 
@@ -16,10 +15,10 @@ const CreateProduct = () => {
 	const [price, setPrice] = useState('')
 	const [inStock, setInStock] = useState(null)
 	const [isFeatured, setIsFeatured] = useState(null)
-	const [weight, setWeight] = useState('')
+	const [weightKg, setWeightKg] = useState('')
 	const [tags, setTags] = useState('')
 	const [flavour, setFlavour] = useState('')
-	const [dated, setDated] = useState(null)
+	const [isDated, setIsDated] = useState(null)
 	const [size, setSize] = useState('')
 
 	useEffect(() => {
@@ -48,7 +47,7 @@ const CreateProduct = () => {
 		e.preventDefault()
 		try {
 			const productData = new FormData()
-			console.log(image)
+			console.log(typeof inStock)
 			productData.append('image', image)
 			productData.append('name', name)
 			productData.append('categories', categories)
@@ -56,10 +55,10 @@ const CreateProduct = () => {
 			productData.append('price', price)
 			productData.append('inStock', inStock)
 			productData.append('isFeatured', isFeatured)
-			productData.append('weightKg', weight)
+			productData.append('weightKg', weightKg)
 			productData.append('tags', tags)
 			productData.append('flavour', flavour)
-			productData.append('dated', dated)
+			productData.append('isDated', isDated)
 			productData.append('size', size)
 
 			const {data} = await axios.post('/product', productData)
@@ -73,7 +72,7 @@ const CreateProduct = () => {
 
 	return (
 		<>
-			<div className='p-3 mt-2 mb-2 h4 bg-light'>Manage Products</div>
+			<div className='p-3 mt-2 mb-2 h4 bg-light'>Create Product</div>
 			<div className='pt-2'>
 				{image && (
 					<div className='text-center'>
@@ -96,88 +95,80 @@ const CreateProduct = () => {
 					/>
 				</label>
 			</div>
-			<input
-				type='text'
-				className='form-control mb-3 p-2 mt-3'
-				placeholder='Product name'
-				value={name}
-				onChange={(e) => setName(e.target.value)}
-			/>
-			<textarea
-				type='text'
-				className='form-control mb-3 p-2'
-				placeholder='Description'
-				value={description}
-				onChange={(e) => setDescription(e.target.value)}
-			/>
-			<input
-				type='number'
-				className='form-control mb-3 p-2'
-				placeholder='Price'
-				value={price}
-				onChange={(e) => {
-					if (e.target.value < 0) setPrice(0)
-					else setPrice(e.target.value)
-				}}
-			/>
-			<Select
-				size='large'
-				className='mb-3'
-				placeholder='In stock?'
-				style={{width: '100%'}}
-				onChange={(value) => setInStock(value)}
-			>
-				<Option value='1'>Yes</Option>
-				<Option value='0'>No</Option>
-			</Select>
-			<Select
-				size='large'
-				className='mb-3'
-				placeholder='Is featured?'
-				style={{width: '100%'}}
-				onChange={(value) => setIsFeatured(value)}
-			>
-				<Option value='1'>Yes</Option>
-				<Option value='0'>No</Option>
-			</Select>
-			<input
-				type='number'
-				className='form-control mb-3 p-2'
-				placeholder='Weight'
-				value={weight}
-				onChange={(e) => {
-					if (e.target.value < 0) setWeight(0)
-					else setWeight(e.target.value)
-				}}
-			/>
+			<div className='form-floating'>
+				<input
+					type='text'
+					className='form-control mb-3 mt-3'
+					placeholder='Product name'
+					value={name}
+					onChange={(e) => setName(e.target.value)}
+				/>
+				<label className='opacity-50'>Product name</label>
+			</div>
 
-			<input
-				type='text'
-				className='form-control mb-3 p-2'
-				placeholder='Flavour'
-				value={flavour}
-				onChange={(e) => setFlavour(e.target.value)}
-			/>
+			<div className='form-floating'>
+				<textarea
+					type='text'
+					className='form-control mb-3'
+					placeholder='Description'
+					value={description}
+					onChange={(e) => setDescription(e.target.value)}
+				/>
+				<label className='opacity-50'>Description</label>
+			</div>
+
+			<div className='form-floating'>
+				<input
+					type='number'
+					className='form-control mb-3'
+					placeholder='Price'
+					value={price}
+					onChange={(e) => {
+						if (e.target.value < 0) setPrice(0)
+						else setPrice(e.target.value)
+					}}
+				/>
+				<label className='opacity-50'>Price</label>
+			</div>
+			<div className='form-floating'>
+				<input
+					type='number'
+					className='form-control mb-3'
+					placeholder='Weight (kg)'
+					value={weightKg}
+					onChange={(e) => {
+						if (e.target.value < 0) setWeightKg(0)
+						else setWeightKg(e.target.value)
+					}}
+				/>
+				<label className='opacity-50'>Weight (kg)</label>
+			</div>
+			<div className='form-floating'>
+				<input
+					type='text'
+					className='form-control mb-3'
+					placeholder='Flavour'
+					value={flavour}
+					onChange={(e) => setFlavour(e.target.value)}
+				/>
+				<label className='opacity-50'>Flavour</label>
+			</div>
+			<div className='form-floating'>
+				<input
+					type='text'
+					className='form-control mb-3'
+					placeholder='Size'
+					onChange={(e) => setSize(e.target.value)}
+				/>
+				<label className='opacity-50'>Size</label>
+			</div>
+			<label className='ms-1' htmlFor='categoriesSelect'>
+				Categories
+			</label>
 			<Select
+				id='categoriesSelect'
 				size='large'
 				className='mb-3'
-				placeholder='Out of date?'
-				style={{width: '100%'}}
-				onChange={(value) => setDated(value)}
-			>
-				<Option value='1'>Yes</Option>
-				<Option value='0'>No</Option>
-			</Select>
-			<input
-				type='text'
-				className='form-control mb-3 p-2'
-				placeholder='Size'
-				onChange={(e) => setSize(e.target.value)}
-			/>
-			<Select
-				size='large'
-				className='mb-3'
-				placeholder='Choose categories'
 				style={{width: '100%'}}
 				onChange={(value) => setCategories(value)}
 			>
@@ -187,15 +178,57 @@ const CreateProduct = () => {
 					</Option>
 				))}
 			</Select>
+			<label className='ms-1' htmlFor='tagsSelect'>
+				Tags
+			</label>
 			<Select
+				id='tagsSelect'
 				mode='tags'
 				size='large'
 				className='mb-3'
 				allowClear
 				style={{width: '100%'}}
-				placeholder='Tags'
 				onChange={(value) => setTags(value)}
 			/>
+			<label className='ms-1' htmlFor='stockSelect'>
+				In stock?
+			</label>
+			<Select
+				id='stockSelect'
+				size='large'
+				className='mb-3'
+				style={{width: '100%'}}
+				onChange={(value) => setInStock(value)}
+			>
+				<Option value={true}>Yes</Option>
+				<Option value={false}>No</Option>
+			</Select>
+			<label className='ms-1' htmlFor='featuredSelect'>
+				Is featured?
+			</label>
+			<Select
+				id='featuredSelect'
+				size='large'
+				className='mb-3'
+				style={{width: '100%'}}
+				onChange={(value) => setIsFeatured(value)}
+			>
+				<Option value={true}>Yes</Option>
+				<Option value={false}>No</Option>
+			</Select>
+			<label className='ms-1' htmlFor='datedSelect'>
+				Out of date?
+			</label>
+			<Select
+				id='datedSelect'
+				size='large'
+				className='mb-3'
+				style={{width: '100%'}}
+				onChange={(value) => setIsDated(value)}
+			>
+				<Option value={true}>Yes</Option>
+				<Option value={false}>No</Option>
+			</Select>
 			<button onClick={handleSubmit} className='btn btn-primary mb-5'>
 				Create product
 			</button>

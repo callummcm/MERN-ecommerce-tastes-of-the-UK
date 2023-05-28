@@ -26,8 +26,8 @@ const productSchema = new mongoose.Schema({
     required: true
   },
   isFeatured: {
-    type: Number,
-    default: 0
+    type: Boolean,
+    default: false
   },
   weightKg: {
     type: Number,
@@ -52,9 +52,8 @@ const productSchema = new mongoose.Schema({
     required: false
   },
   isDated: {
-    type: Number,
-    required: false,
-    default: 0
+    type: Boolean,
+    default: false
   },
   size: {
     type: String,

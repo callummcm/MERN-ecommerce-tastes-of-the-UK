@@ -1,7 +1,6 @@
 import Product from '../models/product.js'
 import slugify from 'slugify'
 import fs from 'fs'
-import product from '../models/product.js'
 
 export const create = async (req, res) => {
   try {
@@ -16,22 +15,30 @@ export const create = async (req, res) => {
       tags,
       weightKg,
       flavour,
-      dated,
+      isDated,
       size
     } = req.fields
     const { image } = req.files
+
+    let inStockBoolean
+    let isFeaturedBoolean
+    let isDatedBoolean
+
+    if (inStock !== 'null') inStockBoolean = Boolean(inStock)
+    if (isFeatured !== 'null') isFeaturedBoolean = Boolean(isFeatured)
+    if (isDated !== 'null') isDatedBoolean = Boolean(isDated)
 
     switch (true) {
       case !name.trim(): return res.json({ error: 'Name is required' })
       //case !description.trim(): res.json({ error: 'Description is required' })
       case !price.trim(): return res.json({ error: 'Price is required' })
       case !categories.trim(): return res.json({ error: 'Category is required' })
-      case !inStock.trim(): return res.json({ error: 'In stock is required' })
-      //case !isFeatured.trim(): res.json({ error: 'Featured is required' })
+      case !(typeof inStockBoolean === 'boolean'): return res.json({ error: 'In stock is required' })
+      case !(typeof isFeaturedBoolean === 'boolean'): return res.json({ error: 'Featured is required' })
       //case !tags.trim(): res.json({ error: 'Tags are required' })
       case !weightKg.trim(): return res.json({ error: 'Weight is required' })
       //case !flavour.trim(): res.json({ error: 'Flavour is required' })
-      //case !dated.trim(): res.json({ error: 'Dated is required' })
+      case !(typeof isDatedBoolean === 'boolean'): return res.json({ error: 'Dated is required' })
       //case !size.trim(): res.json({ error: 'Size is required' })
       case image && image.size > 1000000: return res.json({ error: 'Image should be less than 1mb in size' })
     }
@@ -140,24 +147,30 @@ export const update = async (req, res) => {
       tags,
       weightKg,
       flavour,
-      dated,
+      isDated,
       size
     } = req.fields
     const { image } = req.files
 
-    console.log(weightKg)
+    let inStockBoolean
+    let isFeaturedBoolean
+    let isDatedBoolean
+
+    if (inStock !== 'null') inStockBoolean = Boolean(inStock)
+    if (isFeatured !== 'null') isFeaturedBoolean = Boolean(isFeatured)
+    if (isDated !== 'null') isDatedBoolean = Boolean(isDated)
 
     switch (true) {
       case !name.trim(): return res.json({ error: 'Name is required' })
       //case !description.trim(): res.json({ error: 'Description is required' })
       case !price.trim(): return res.json({ error: 'Price is required' })
       case !categories.trim(): return res.json({ error: 'Category is required' })
-      case !inStock.trim(): return res.json({ error: 'In stock is required' })
-      //case !isFeatured.trim(): res.json({ error: 'Featured is required' })
+      case !(typeof inStockBoolean === 'boolean'): return res.json({ error: 'In stock is required' })
+      case !(typeof isFeaturedBoolean === 'boolean'): return res.json({ error: 'Featured is required' })
       //case !tags.trim(): res.json({ error: 'Tags are required' })
       case !weightKg.trim(): return res.json({ error: 'Weight is required' })
       //case !flavour.trim(): res.json({ error: 'Flavour is required' })
-      //case !dated.trim(): res.json({ error: 'Dated is required' })
+      case !(typeof isDatedBoolean === 'boolean'): return res.json({ error: 'Dated is required' })
       //case !size.trim(): res.json({ error: 'Size is required' })
       case image && image.size > 1000000: return res.json({ error: 'Image should be less than 1mb in size' })
     }
@@ -176,10 +189,6 @@ export const update = async (req, res) => {
       };
 
       product.image = newImage;
-    } else {
-      // If the image object already exists, update its properties
-      product.image.data = fs.readFileSync(image.path);
-      product.image.contentType = image.type;
     }
 
     await product.save()
