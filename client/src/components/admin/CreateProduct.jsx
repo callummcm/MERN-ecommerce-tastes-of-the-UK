@@ -2,11 +2,13 @@ import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import {Select} from 'antd'
 import toast from 'react-hot-toast'
+import {ContentContext} from '../../context/ContentProvider'
+import {useContext} from 'react'
 
 const {Option} = Select
 
 const CreateProduct = () => {
-	const [categoryList, setCategoryList] = useState([])
+	const {categoryList} = useContext(ContentContext)
 
 	const [image, setImage] = useState(null)
 	const [name, setName] = useState('')
@@ -21,23 +23,13 @@ const CreateProduct = () => {
 	const [isDated, setIsDated] = useState(null)
 	const [size, setSize] = useState('')
 
-	useEffect(() => {
-		fetchCategories()
-	}, [])
-
-	const fetchCategories = async () => {
-		try {
-			const {data: categories} = await axios.get('/categories')
-			setCategoryList(categories)
-		} catch (err) {
-			console.log(err)
-		}
-	}
-
 	//for mass updating collection fields
-	const updateFields = async () => {
+	const updateFields = async (e) => {
+		e.preventDefault()
 		try {
-			await axios.patch('/update-product-fields')
+			const productData = new FormData()
+			productData.append('image', image)
+			await axios.patch('/update-product-fields', productData)
 		} catch (error) {
 			console.log(error)
 		}
@@ -47,7 +39,6 @@ const CreateProduct = () => {
 		e.preventDefault()
 		try {
 			const productData = new FormData()
-			console.log(typeof inStock)
 			productData.append('image', image)
 			productData.append('name', name)
 			productData.append('categories', categories)
@@ -72,6 +63,7 @@ const CreateProduct = () => {
 
 	return (
 		<>
+			{/* <button onClick={updateFields}>tset</button> */}
 			<div className='p-3 mt-2 mb-2 h4 bg-light'>Create Product</div>
 			<div className='pt-2'>
 				{image && (

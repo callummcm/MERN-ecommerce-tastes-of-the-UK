@@ -2,8 +2,12 @@ import {useEffect, useState} from 'react'
 import Jumbotron from '../components/cards/Jumbotron'
 import axios from 'axios'
 import moment from 'moment'
+import ProductCard from '../components/cards/ProductCard'
+import {ContentContext} from '../context/ContentProvider'
+import {useContext} from 'react'
 
 const Home = () => {
+	const {featuredProducts} = useContext(ContentContext)
 	const [products, setProducts] = useState([])
 
 	useEffect(() => {
@@ -19,36 +23,37 @@ const Home = () => {
 		}
 	}
 
-	//for sorting if I wish too.
-	const arr = [...products]
-	const sortedbyFeatured = arr?.sort((a, b) =>
-		a.isFeatured < b.isFeatured ? 1 : -1
-	)
-
-	// MOVE PRODUCT AND CATEGORY LIST INTO CONTEXT
-
 	return (
 		<>
 			<Jumbotron
 				title='Taste of the UK'
 				subtitle='Supplying the best of British'
 			/>
-			<h2>New Arrivals</h2>
-			{products?.map((p) => (
-				<div key={p._id}>
-					<p>{p.name}</p>
-					<p>{moment(p.createdAt).fromNow()}</p>
-					<p>${p.price}</p>
+
+			<div className='row'>
+				<div className='col-md-6'>
+					<p className='p-3 mt-2 mb-2 h4 bg-light text-center'>New Arrivals</p>
+					<div className='row'>
+						{products?.map((p) => (
+							<div key={p._id} className='col-md-3'>
+								<ProductCard product={p} />
+							</div>
+						))}
+					</div>
 				</div>
-			))}
-			<h2>Featured</h2>
-			{arr?.map((p) => (
-				<div key={p._id}>
-					<p>{p.name}</p>
-					<p>{moment(p.createdAt).fromNow()}</p>
-					<p>${p.price}</p>
+				<div className='col-md-6'>
+					<p className='p-3 mt-2 mb-2 h4 bg-light text-center'>
+						Featured Products
+					</p>
+					<div className='row'>
+						{featuredProducts?.map((p) => (
+							<div key={p._id} className='col-md-6'>
+								<ProductCard product={p} />
+							</div>
+						))}
+					</div>
 				</div>
-			))}
+			</div>
 		</>
 	)
 }

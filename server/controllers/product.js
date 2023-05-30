@@ -89,6 +89,20 @@ export const listAll = async (req, res) => {
   }
 }
 
+export const fetchFeatured = async (req, res) => {
+  try {
+
+    const featuredProducts = await Product.find({ isFeatured: true })
+      .populate('categories')
+      .limit(12)
+      .sort({ name: 1 })
+
+    res.json(featuredProducts)
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 export const read = async (req, res) => {
   try {
 
@@ -105,7 +119,7 @@ export const read = async (req, res) => {
 export const image = async (req, res) => {
   try {
 
-    const product = await Product.findById(req.params.id)
+    let product = await Product.findById(req.params.id)
       .select('image')
 
     if (product.image.data) {
@@ -203,6 +217,11 @@ export const update = async (req, res) => {
 export const removeFields = async (req, res) => {
   try {
 
+    //console.log(req.fields)
+    //console.log(req.files)
+
+    const { image } = req.files
+    //console.log(image)
 
     const products = await Product.find({})
 
@@ -213,10 +232,14 @@ export const removeFields = async (req, res) => {
           {
             $set:
             {
-              slug: slugify(p.name)
+              image: {
+                data: fs.readFileSync(image.path),
+                contentType: image.type
+              }
             }
           }
         );
+        return res.json(response)
       } catch (error) {
         console.log(error)
       }
@@ -237,7 +260,6 @@ export const removeFields = async (req, res) => {
     // );
     //Cheese and Onion, Yes
 
-    console.log(response)
     return res.json(response)
   } catch (error) {
     console.log('Error:', error.message)

@@ -3,12 +3,13 @@ import {useEffect, useState} from 'react'
 import {Select} from 'antd'
 import slugify from 'slugify'
 import toast from 'react-hot-toast'
+import {ContentContext} from '../../context/ContentProvider'
+import {useContext} from 'react'
 
 const {Option} = Select
 
 const ManageProducts = () => {
-	const [productList, setProductList] = useState([])
-	const [categoryList, setCategoryList] = useState([])
+	const {productList, categoryList} = useContext(ContentContext)
 
 	const [id, setId] = useState('')
 	const [image, setImage] = useState(null)
@@ -25,10 +26,6 @@ const ManageProducts = () => {
 	const [size, setSize] = useState('')
 
 	const [selectedProduct, setSelectedProduct] = useState(null)
-
-	useEffect(() => {
-		fetchProductsAndCategories()
-	}, [])
 
 	useEffect(() => {
 		if (selectedProduct) loadSelectedProduct()
@@ -49,17 +46,6 @@ const ManageProducts = () => {
 			setSelectedProduct(null)
 		}
 	}, [selectedProduct])
-
-	const fetchProductsAndCategories = async () => {
-		try {
-			const {data: products} = await axios.get('/all-products')
-			setProductList(products)
-			const {data: categories} = await axios.get('/categories')
-			setCategoryList(categories)
-		} catch (err) {
-			console.log(err)
-		}
-	}
 
 	const loadSelectedProduct = async () => {
 		try {
@@ -171,7 +157,6 @@ const ManageProducts = () => {
 				) : (
 					<div className='text-center'>
 						<img
-							// doesn't like loading img from database if string
 							src={`${import.meta.env.VITE_API}/product/image/${id}`}
 							alt='product photo'
 							className='img img-responsive rounded'
