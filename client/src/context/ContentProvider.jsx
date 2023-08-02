@@ -8,10 +8,8 @@ const ContentProvider = ({children}) => {
 	const [categoryList, setCategoryList] = useState([])
 	const [featuredProducts, setFeaturedProducts] = useState([])
 
-	const fetchProductsAndCategories = async () => {
+	const fetchCategories = async () => {
 		try {
-			const {data: products} = await axios.get('/all-products')
-			setProductList(products)
 			const {data: categories} = await axios.get('/categories')
 			setCategoryList(categories)
 		} catch (err) {
@@ -29,12 +27,11 @@ const ContentProvider = ({children}) => {
 	}
 
 	useEffect(() => {
-		fetchProductsAndCategories()
+		fetchCategories()
 		fetchFeaturedProducts()
 	}, [])
 
 	const contentContext = {
-		productList,
 		categoryList,
 		featuredProducts,
 	}

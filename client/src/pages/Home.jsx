@@ -1,7 +1,6 @@
 import {useEffect, useState} from 'react'
 import Jumbotron from '../components/cards/Jumbotron'
 import axios from 'axios'
-import moment from 'moment'
 import ProductCard from '../components/cards/ProductCard'
 import {ContentContext} from '../context/ContentProvider'
 import {useContext} from 'react'
@@ -26,11 +25,12 @@ const Home = () => {
 	return (
 		<>
 			<Jumbotron
-				title='Taste of the UK'
-				subtitle='Supplying the best of British'
+				title='Tastes of the UK'
+				subtitle='Supplying the Best of British'
 			/>
 
 			<div className='row'>
+				<div className='col-md-1' />
 				<div className='col-md-6'>
 					<p className='p-3 mt-2 mb-2 h4 bg-light text-center'>New Arrivals</p>
 					<div className='row'>
@@ -41,7 +41,7 @@ const Home = () => {
 						))}
 					</div>
 				</div>
-				<div className='col-md-6'>
+				<div className='col-md-4'>
 					<p className='p-3 mt-2 mb-2 h4 bg-light text-center'>
 						Featured Products
 					</p>
@@ -53,6 +53,7 @@ const Home = () => {
 						))}
 					</div>
 				</div>
+				<div className='col-md-1' />
 			</div>
 		</>
 	)

@@ -65,27 +65,29 @@ export const create = async (req, res) => {
 
 export const list = async (req, res) => {
   try {
-    const products = await Product.find({})
+    const products = await Product.find({ price: { $ne: '', $ne: null, $type: 'number' } })
       .populate('categories')
       .select('-image')
-      .limit(12)
+      .limit(20)
       .sort({ createdAt: -1 })
 
-    res.json(products)
+    return res.json(products)
   } catch (err) {
     console.log(err);
+    return res.status(400).json(err)
   }
 }
 
 export const listAll = async (req, res) => {
   try {
 
-    const products = await Product.find({})
+    const products = await Product.find({ price: { $ne: '', $ne: null, $type: 'number' } })
       .sort({ name: 1 })
 
-    res.json(products)
+    return res.json(products)
   } catch (err) {
     console.log(err);
+    return res.status(400).json(err)
   }
 }
 
@@ -97,9 +99,10 @@ export const fetchFeatured = async (req, res) => {
       .limit(12)
       .sort({ name: 1 })
 
-    res.json(featuredProducts)
+    return res.json(featuredProducts)
   } catch (err) {
     console.log(err);
+    return res.status(400).json(err)
   }
 }
 
@@ -110,9 +113,10 @@ export const read = async (req, res) => {
       .select('-image')
       .populate('categories')
 
-    res.json(product)
+    return res.json(product)
   } catch (err) {
     console.log(err)
+    return res.status(400).json(err)
   }
 }
 
@@ -132,6 +136,7 @@ export const image = async (req, res) => {
 
   } catch (err) {
     console.log(err)
+    return res.status(400).json(err)
   }
 }
 
@@ -141,10 +146,11 @@ export const remove = async (req, res) => {
     const product = await Product.findByIdAndDelete(req.params.id)
       .select('-image')
 
-    res.json(product)
+    return res.json(product)
 
   } catch (err) {
     console.log(err)
+    return res.status(400).json(err)
   }
 }
 
@@ -170,9 +176,9 @@ export const update = async (req, res) => {
     let isFeaturedBoolean
     let isDatedBoolean
 
-    if (inStock !== 'null') inStockBoolean = Boolean(inStock)
-    if (isFeatured !== 'null') isFeaturedBoolean = Boolean(isFeatured)
-    if (isDated !== 'null') isDatedBoolean = Boolean(isDated)
+    if (inStock !== 'null' && inStock !== '') inStockBoolean = Boolean(inStock)
+    if (isFeatured !== 'null' && isFeatured !== '') isFeaturedBoolean = Boolean(isFeatured)
+    if (isDated !== 'null' && isDated !== '') isDatedBoolean = Boolean(isDated)
 
     switch (true) {
       case !name.trim(): return res.json({ error: 'Name is required' })
@@ -190,7 +196,6 @@ export const update = async (req, res) => {
     }
 
     // update product
-    //console.log(image)
     const product = await Product.findByIdAndUpdate(req.params.id, {
       ...req.fields,
       slug: slugify(name)
@@ -211,6 +216,65 @@ export const update = async (req, res) => {
   catch (err) {
     console.log(err);
     return res.status(400).json(err)
+  }
+}
+
+export const filteredProducts = async (req, res) => {
+  try {
+    const { selectedCategory, priceRange } = req.body
+
+    const getCount = req.query.getCount
+    const perPage = 20
+    const page = req.params.page ? req.params.page : 1
+
+    let args = {}
+    if (selectedCategory.length) args.categories = selectedCategory
+    if (priceRange.length) args.price = { $gte: priceRange[0], $lte: priceRange[1] }
+
+    if (getCount === 'true') {
+      const filteredProductCount = await Product.find(args).countDocuments()
+      return res.json(filteredProductCount)
+    }
+    const products = await Product.find(args)
+      .skip((page - 1) * perPage)
+      .limit(20)
+      .sort({ createdAt: -1, _id: -1 })
+      .select('-image')
+    return res.json(products)
+
+  } catch (error) {
+    console.log(error)
+    return res.status(400).json(error)
+  }
+}
+
+export const productsCount = async (req, res) => {
+  try {
+
+    const total = await Product.find({}).estimatedDocumentCount()
+    return res.json(total)
+  } catch (error) {
+    console.log(error)
+    return res.status(400).json(error)
+  }
+}
+
+export const listProductsPagination = async (req, res) => {
+  try {
+    const perPage = 20
+    const page = req.params.page ? req.params.page : 1
+    const products = await Product.find({})
+      .skip((page - 1) * perPage)
+      .select('-image')
+      .sort({ createdAt: -1, _id: -1 })
+      .limit(perPage)
+
+
+
+    return res.json(products)
+  } catch (error) {
+    console.log(error)
+    return res.status(400).json(error)
   }
 }
 

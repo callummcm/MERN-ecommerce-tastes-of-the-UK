@@ -35,6 +35,11 @@ const Navbar = () => {
 						HOME
 					</NavLink>
 				</li>
+				<li className='nav-item'>
+					<NavLink className='nav-link' aria-current='page' to='/shop'>
+						SHOP
+					</NavLink>
+				</li>
 
 				<Modal
 					open={showLoginModal}

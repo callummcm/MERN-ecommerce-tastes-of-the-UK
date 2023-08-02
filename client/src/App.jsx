@@ -1,9 +1,8 @@
 import './App.css'
 import Home from './pages/Home'
-import Login from './pages/auth/Login'
-import Register from './pages/auth/Register'
 import Navbar from './components/nav/Navbar'
 import Dashboard from './pages/user/Dashboard'
+import Shop from './pages/user/Shop'
 import AdminDashboard from './pages/admin/Dashboard'
 import PrivateRoute from './components/routes/PrivateRoute'
 import AdminRoute from './components/routes/AdminRoute'
@@ -33,16 +32,16 @@ const App = () => {
 				<Navbar />
 				<Routes>
 					<Route path='/' element={<Home />} />
-					{/* Using modal, restore this if modal is removed
-					Also remove pages/auth/login&register later
-					<Route path='/login' element={<Login />} />
-					<Route path='/register' element={<Register />} /> */}
+					<Route path='/shop' element={<Shop />} />
+
 					<Route path='/dashboard' element={<PrivateRoute />}>
 						<Route path='' element={<Dashboard />} />
 					</Route>
+
 					<Route path='/dashboard' element={<AdminRoute />}>
 						<Route path='admin' element={<AdminDashboard />} />
 					</Route>
+
 					<Route path='*' element={<PageNotFound />} replace />
 				</Routes>
 			</BrowserRouter>

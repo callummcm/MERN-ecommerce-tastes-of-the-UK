@@ -9,7 +9,8 @@ import {useContext} from 'react'
 const {Option} = Select
 
 const ManageProducts = () => {
-	const {productList, categoryList} = useContext(ContentContext)
+	const {categoryList} = useContext(ContentContext)
+	const [productList, setProductList] = useState([])
 
 	const [id, setId] = useState('')
 	const [image, setImage] = useState(null)
@@ -28,24 +29,40 @@ const ManageProducts = () => {
 	const [selectedProduct, setSelectedProduct] = useState(null)
 
 	useEffect(() => {
-		if (selectedProduct) loadSelectedProduct()
-		else {
-			setId('')
-			setImage(null)
-			setName('')
-			setCategories('')
-			setDescription('')
-			setPrice('')
-			setInStock('')
-			setIsFeatured('')
-			setWeightKg('')
-			setTags([])
-			setFlavour('')
-			setIsDated('')
-			setSize('')
-			setSelectedProduct(null)
+		if (selectedProduct) {
+			resetFields()
+			loadSelectedProduct()
+		} else {
+			loadAllProducts()
+			resetFields()
+			//setSelectedProduct(null)
 		}
 	}, [selectedProduct])
+
+	const resetFields = () => {
+		setId('')
+		setImage(null)
+		setName('')
+		setCategories('')
+		setDescription('')
+		setPrice('')
+		setInStock('')
+		setIsFeatured('')
+		setWeightKg('')
+		setTags([])
+		setFlavour('')
+		setIsDated('')
+		setSize('')
+	}
+
+	const loadAllProducts = async () => {
+		try {
+			const {data: products} = await axios.get('/all-products')
+			setProductList(products)
+		} catch (error) {
+			console.log(error)
+		}
+	}
 
 	const loadSelectedProduct = async () => {
 		try {
@@ -53,26 +70,28 @@ const ManageProducts = () => {
 				`/product/${selectedProduct}`
 			)
 
-			console.log(productToDisplay)
-
 			setId(productToDisplay._id)
-			//setImage(productToDisplay.image)
-			setName(productToDisplay.name)
-			if (productToDisplay.categories)
+			productToDisplay.name && setName(productToDisplay.name)
+			productToDisplay.categories &&
 				setCategories(productToDisplay.categories._id)
-			setDescription(productToDisplay.description)
-			setPrice(productToDisplay.price)
-			setInStock(productToDisplay.inStock)
-			setIsFeatured(productToDisplay.isFeatured)
-			setWeightKg(productToDisplay.weightKg)
+			productToDisplay.description &&
+				setDescription(productToDisplay.description)
+			productToDisplay.price && setPrice(productToDisplay.price)
+			if (productToDisplay.inStock !== undefined)
+				setInStock(productToDisplay.inStock)
+			if (productToDisplay.isFeatured !== undefined)
+				setIsFeatured(productToDisplay.isFeatured)
+			productToDisplay.weightKg && setWeightKg(productToDisplay.weightKg)
 			setTags(
 				productToDisplay.tags
 					? productToDisplay.tags.split(',').map((tag) => tag.trim())
 					: []
 			)
-			setFlavour(productToDisplay.flavour)
-			setIsDated(productToDisplay.isDated)
-			setSize(productToDisplay.size)
+			productToDisplay.flavour && setFlavour(productToDisplay.flavour)
+			console.log('is dated: ' + productToDisplay.isDated)
+			if (productToDisplay.isDated !== undefined)
+				setIsDated(productToDisplay.isDated)
+			productToDisplay.size && setSize(productToDisplay.size)
 		} catch (error) {
 			console.log(error)
 		}
@@ -82,7 +101,7 @@ const ManageProducts = () => {
 		e.preventDefault()
 		try {
 			const productData = new FormData()
-			productData.append('image', image)
+			if (image) productData.append('image', image)
 			productData.append('name', name)
 			productData.append('categories', categories)
 			productData.append('description', description)
