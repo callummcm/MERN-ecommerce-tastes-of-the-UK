@@ -1,11 +1,15 @@
 import {Badge} from 'antd'
 import {useEffect, useState} from 'react'
+import {useNavigate} from 'react-router-dom'
 
 const ProductCard = ({product}) => {
-	const {_id, name, description, price, inStock, createdAt, updatedAt} = product
+	const {_id, name, description, price, inStock, createdAt, updatedAt, slug} =
+		product
 
 	const [isInStock, setIsInStock] = useState('')
 	const [shortName, setShortName] = useState('')
+
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		if (inStock) setIsInStock('In stock')
@@ -14,14 +18,10 @@ const ProductCard = ({product}) => {
 		setShortName(name.slice(0, 30) + (name.length > 30 ? '...' : ''))
 	}, [])
 
-	const handleViewProduct = () => {
-		console.log(`go to: ${_id} product page`)
-	}
-
 	return (
 		<>
 			<div className='card mb-3 hoverable'>
-				<div onClick={handleViewProduct} className='pointer'>
+				<div onClick={() => navigate(`/product/${slug}`)} className='pointer'>
 					<Badge.Ribbon text={`${isInStock}`} color={inStock ? 'green' : 'red'}>
 						<img
 							src={`${import.meta.env.VITE_API}/product/image/${_id}`}

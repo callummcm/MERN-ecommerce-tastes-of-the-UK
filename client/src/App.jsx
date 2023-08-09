@@ -14,6 +14,7 @@ import {
 	BrowserRouter,
 } from 'react-router-dom'
 import {Toaster} from 'react-hot-toast'
+import ProductView from './pages/user/ProductView'
 
 const PageNotFound = () => {
 	return (
@@ -35,6 +36,7 @@ const App = () => {
 					<Route path='/' element={<Home />} />
 					<Route path='/shop' element={<Shop />} />
 					<Route path='/search' element={<Search />} />
+					<Route path='/product/:slug' element={<ProductView />} />
 
 					<Route path='/dashboard' element={<PrivateRoute />}>
 						<Route path='' element={<Dashboard />} />
