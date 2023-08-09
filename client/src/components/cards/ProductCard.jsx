@@ -4,12 +4,12 @@ import {useEffect, useState} from 'react'
 const ProductCard = ({product}) => {
 	const {_id, name, description, price, inStock, createdAt, updatedAt} = product
 
-	const [isInStock, setisInStock] = useState('')
+	const [isInStock, setIsInStock] = useState('')
 	const [shortName, setShortName] = useState('')
 
 	useEffect(() => {
-		if (inStock) setisInStock('In stock')
-		else setisInStock('Out of stock')
+		if (inStock) setIsInStock('In stock')
+		else setIsInStock('Out of stock')
 
 		setShortName(name.slice(0, 30) + (name.length > 30 ? '...' : ''))
 	}, [])

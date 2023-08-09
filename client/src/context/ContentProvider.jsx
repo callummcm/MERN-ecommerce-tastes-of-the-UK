@@ -4,7 +4,6 @@ import axios from 'axios'
 const ContentContext = React.createContext({})
 
 const ContentProvider = ({children}) => {
-	const [productList, setProductList] = useState([])
 	const [categoryList, setCategoryList] = useState([])
 	const [featuredProducts, setFeaturedProducts] = useState([])
 
@@ -26,6 +25,10 @@ const ContentProvider = ({children}) => {
 		}
 	}
 
+	const useSearch = () => {
+		console.log('first')
+	}
+
 	useEffect(() => {
 		fetchCategories()
 		fetchFeaturedProducts()
@@ -34,6 +37,7 @@ const ContentProvider = ({children}) => {
 	const contentContext = {
 		categoryList,
 		featuredProducts,
+		useSearch,
 	}
 
 	return (

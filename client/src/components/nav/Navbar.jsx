@@ -5,6 +5,7 @@ import {useEffect, useRef, useState} from 'react'
 import Login from '../auth/Login'
 import Register from '../auth/Register'
 import {Modal} from 'antd'
+import Search from '../forms/Search'
 
 const Navbar = () => {
 	const [auth, setAuth] = useAuth()
@@ -40,6 +41,8 @@ const Navbar = () => {
 						SHOP
 					</NavLink>
 				</li>
+
+				<Search />
 
 				<Modal
 					open={showLoginModal}

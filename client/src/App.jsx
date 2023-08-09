@@ -3,6 +3,7 @@ import Home from './pages/Home'
 import Navbar from './components/nav/Navbar'
 import Dashboard from './pages/user/Dashboard'
 import Shop from './pages/user/Shop'
+import Search from './pages/user/Search'
 import AdminDashboard from './pages/admin/Dashboard'
 import PrivateRoute from './components/routes/PrivateRoute'
 import AdminRoute from './components/routes/AdminRoute'
@@ -33,6 +34,7 @@ const App = () => {
 				<Routes>
 					<Route path='/' element={<Home />} />
 					<Route path='/shop' element={<Shop />} />
+					<Route path='/search' element={<Search />} />
 
 					<Route path='/dashboard' element={<PrivateRoute />}>
 						<Route path='' element={<Dashboard />} />
