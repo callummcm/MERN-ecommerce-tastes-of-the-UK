@@ -277,6 +277,24 @@ export const productSearch = async (req, res) => {
   }
 }
 
+export const fetchRelatedProducts = async (req, res) => {
+  try {
+    const { productId, categoryId } = req.params
+    const related = await Product.find({
+      categories: categoryId,
+      _id: { $ne: productId }
+    })
+      .select('-image')
+      .populate('categories')
+      .limit(6)
+
+    res.json(related)
+  } catch (error) {
+    console.log(error)
+    return res.status(400).json(error)
+  }
+}
+
 export const listProductsPagination = async (req, res) => {
   try {
     const perPage = 20
