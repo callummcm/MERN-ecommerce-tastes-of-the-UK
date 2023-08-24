@@ -6,12 +6,15 @@ import Login from '../auth/Login'
 import Register from '../auth/Register'
 import {Modal} from 'antd'
 import Search from '../forms/Search'
+import {useCart} from '../../context/cart'
+import {Badge} from 'antd'
 
 const Navbar = () => {
 	const [auth, setAuth] = useAuth()
 	const [showLoginModal, setShowLoginModal] = useState(false)
 	const [showRegisterModal, setShowRegisterModal] = useState(false)
 	const navigate = useNavigate()
+	const [cart, setCart] = useCart()
 
 	const handleLogout = () => {
 		setAuth({...auth, user: null, token: ''})
@@ -30,7 +33,7 @@ const Navbar = () => {
 
 	return (
 		<>
-			<ul className='nav d-flex justify-content-between'>
+			<ul className='nav d-flex justify-content-between sticky-top bg-light'>
 				<li className='nav-item'>
 					<NavLink className='nav-link' aria-current='page' to='/'>
 						HOME
@@ -40,6 +43,13 @@ const Navbar = () => {
 					<NavLink className='nav-link' aria-current='page' to='/shop'>
 						SHOP
 					</NavLink>
+				</li>
+				<li className='nav-item mt-1'>
+					<Badge count={cart?.length} showZero={true} offset={[-2, 12]}>
+						<NavLink className='nav-link' aria-current='page' to='/cart'>
+							CART
+						</NavLink>
+					</Badge>
 				</li>
 
 				<Search />

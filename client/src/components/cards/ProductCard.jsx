@@ -1,6 +1,8 @@
 import {Badge} from 'antd'
 import {useEffect, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
+import {useCart} from '../../context/cart'
+import toast from 'react-hot-toast'
 
 const ProductCard = ({product}) => {
 	const {_id, name, description, price, inStock, createdAt, updatedAt, slug} =
@@ -8,6 +10,8 @@ const ProductCard = ({product}) => {
 
 	const [isInStock, setIsInStock] = useState('')
 	const [shortName, setShortName] = useState('')
+
+	const [cart, setCart] = useCart()
 
 	const navigate = useNavigate()
 
@@ -41,7 +45,13 @@ const ProductCard = ({product}) => {
 					</div>
 				</div>
 				<div className='d-flex justify-content-between'>
-					<button className='btn btn-primary col card-button m-3'>
+					<button
+						className='btn btn-primary col card-button m-3'
+						onClick={() => {
+							setCart([...cart, product])
+							toast.success('Added to cart')
+						}}
+					>
 						Add to Cart
 					</button>
 				</div>

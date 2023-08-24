@@ -1,6 +1,10 @@
 .active {
-  text-decoration: underline;
-  text-decoration-thickness: 4px;
+  text-decoration: underline !important;
+  text-decoration-thickness: 4px !important;
+}
+
+.tab-pane {
+  text-decoration: none !important;
 }
 
 .pointer {

@@ -4,6 +4,8 @@ import axios from 'axios'
 import {useParams} from 'react-router-dom'
 import ProductCard from '../../components/cards/ProductCard'
 import {Badge} from 'antd'
+import {useCart} from '../../context/cart'
+import toast from 'react-hot-toast'
 
 const ProductView = () => {
 	const [product, setProduct] = useState({})
@@ -13,11 +15,13 @@ const ProductView = () => {
 	const [quantity, setQuantity] = useState(1)
 	const [activeTab, setActiveTab] = useState('description')
 
+	const [cart, setCart] = useCart()
+
 	const params = useParams()
 
 	useEffect(() => {
 		if (params?.slug) fetchProduct()
-	}, [])
+	}, [params?.slug])
 
 	useEffect(() => {
 		if (product?.inStock) setIsInStock('In stock')
@@ -87,7 +91,15 @@ const ProductView = () => {
 													min='1'
 													style={{maxWidth: '90px'}}
 												/>
-												<button className='btn btn-primary ml-3'>
+												<button
+													className='btn btn-primary col card-button m-3'
+													onClick={() => {
+														const productsToAdd = product
+														console.log(productsToAdd)
+														setCart([...cart, productsToAdd])
+														toast.success('Added to cart')
+													}}
+												>
 													Add to Cart
 												</button>
 											</div>
@@ -130,7 +142,6 @@ const ProductView = () => {
 											className={`tab-pane ${
 												activeTab === 'extraInfo' ? 'active' : ''
 											}`}
-											style={{textDecoration: 'none'}}
 										>
 											<p>Weight: {product?.weightKg}kg</p>
 											<p>Category: {product?.categories?.name}</p>
