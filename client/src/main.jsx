@@ -6,7 +6,7 @@ import 'antd/dist/reset.css'
 import {AuthProvider} from './context/auth'
 import {ContentProvider} from './context/ContentProvider'
 import {SearchProvider} from './context/search'
-import {CartProvider} from './context/cart'
+import {CartProvider} from './context/CartContext'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
 	<React.StrictMode>

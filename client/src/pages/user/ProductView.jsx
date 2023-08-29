@@ -4,7 +4,8 @@ import axios from 'axios'
 import {useParams} from 'react-router-dom'
 import ProductCard from '../../components/cards/ProductCard'
 import {Badge} from 'antd'
-import {useCart} from '../../context/cart'
+import {CartContext} from '../../context/CartContext'
+import {useContext} from 'react'
 import toast from 'react-hot-toast'
 
 const ProductView = () => {
@@ -15,7 +16,8 @@ const ProductView = () => {
 	const [quantity, setQuantity] = useState(1)
 	const [activeTab, setActiveTab] = useState('description')
 
-	const [cart, setCart] = useCart()
+	const {cart, setCart, increaseCartQuantity, addToCart} =
+		useContext(CartContext)
 
 	const params = useParams()
 
@@ -94,9 +96,7 @@ const ProductView = () => {
 												<button
 													className='btn btn-primary col card-button m-3'
 													onClick={() => {
-														const productsToAdd = product
-														console.log(productsToAdd)
-														setCart([...cart, productsToAdd])
+														increaseCartQuantity(product, quantity)
 														toast.success('Added to cart')
 													}}
 												>

@@ -1,7 +1,8 @@
 import {Badge} from 'antd'
 import {useEffect, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-import {useCart} from '../../context/cart'
+import {CartContext} from '../../context/CartContext'
+import {useContext} from 'react'
 import toast from 'react-hot-toast'
 
 const ProductCard = ({product}) => {
@@ -11,7 +12,8 @@ const ProductCard = ({product}) => {
 	const [isInStock, setIsInStock] = useState('')
 	const [shortName, setShortName] = useState('')
 
-	const [cart, setCart] = useCart()
+	const {cart, setCart, increaseCartQuantity, addToCart} =
+		useContext(CartContext)
 
 	const navigate = useNavigate()
 
@@ -48,7 +50,7 @@ const ProductCard = ({product}) => {
 					<button
 						className='btn btn-primary col card-button m-3'
 						onClick={() => {
-							setCart([...cart, product])
+							increaseCartQuantity(product)
 							toast.success('Added to cart')
 						}}
 					>

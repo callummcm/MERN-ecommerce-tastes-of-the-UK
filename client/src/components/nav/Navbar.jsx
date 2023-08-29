@@ -6,7 +6,8 @@ import Login from '../auth/Login'
 import Register from '../auth/Register'
 import {Modal} from 'antd'
 import Search from '../forms/Search'
-import {useCart} from '../../context/cart'
+import {CartContext} from '../../context/CartContext'
+import {useContext} from 'react'
 import {Badge} from 'antd'
 
 const Navbar = () => {
@@ -14,7 +15,7 @@ const Navbar = () => {
 	const [showLoginModal, setShowLoginModal] = useState(false)
 	const [showRegisterModal, setShowRegisterModal] = useState(false)
 	const navigate = useNavigate()
-	const [cart, setCart] = useCart()
+	const {cart, setCart} = useContext(CartContext)
 
 	const handleLogout = () => {
 		setAuth({...auth, user: null, token: ''})
