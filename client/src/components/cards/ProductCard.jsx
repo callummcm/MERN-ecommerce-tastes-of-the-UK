@@ -12,8 +12,7 @@ const ProductCard = ({product}) => {
 	const [isInStock, setIsInStock] = useState('')
 	const [shortName, setShortName] = useState('')
 
-	const {cart, setCart, increaseCartQuantity, addToCart} =
-		useContext(CartContext)
+	const {cart, setCart, updateCartQuantity} = useContext(CartContext)
 
 	const navigate = useNavigate()
 
@@ -50,7 +49,7 @@ const ProductCard = ({product}) => {
 					<button
 						className='btn btn-primary col card-button m-3'
 						onClick={() => {
-							increaseCartQuantity(product)
+							updateCartQuantity(product)
 							toast.success('Added to cart')
 						}}
 					>

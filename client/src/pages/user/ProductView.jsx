@@ -16,8 +16,7 @@ const ProductView = () => {
 	const [quantity, setQuantity] = useState(1)
 	const [activeTab, setActiveTab] = useState('description')
 
-	const {cart, setCart, increaseCartQuantity, addToCart} =
-		useContext(CartContext)
+	const {cart, setCart, updateCartQuantity, addToCart} = useContext(CartContext)
 
 	const params = useParams()
 
@@ -49,6 +48,14 @@ const ProductView = () => {
 			`/related-products/${productId}/${categoryId}`
 		)
 		setRelatedProducts(data)
+	}
+
+	const handleQuantityChange = (e) => {
+		const newQuantity = parseInt(e.target.value)
+		console.log(newQuantity)
+		if (Number.isInteger(newQuantity) && newQuantity > 0)
+			setQuantity(newQuantity)
+		else setQuantity(1)
 	}
 
 	return (
@@ -87,16 +94,16 @@ const ProductView = () => {
 											<div className='input-group mb-3 mt-auto'>
 												<input
 													type='number'
-													className='form-control form-control-sm text-center'
+													className='form-control form-control-sm text-center m-3'
 													value={quantity}
-													onChange={(e) => setQuantity(e.target.value)}
+													onChange={(e) => handleQuantityChange(e)}
 													min='1'
-													style={{maxWidth: '90px'}}
+													style={{maxWidth: '50px', maxHeight: '40px'}}
 												/>
 												<button
 													className='btn btn-primary col card-button m-3'
 													onClick={() => {
-														increaseCartQuantity(product, quantity)
+														updateCartQuantity(product, quantity)
 														toast.success('Added to cart')
 													}}
 												>
