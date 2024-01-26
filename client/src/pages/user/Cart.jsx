@@ -1,15 +1,24 @@
 import {useNavigate} from 'react-router-dom'
 import Jumbotron from '../../components/cards/Jumbotron'
 import {CartContext} from '../../context/CartContext'
+import {useAuth} from '../../context/auth'
 import {useContext, useEffect, useState} from 'react'
 import CartProductCard from '../../components/cards/CartProductCard'
 
 const Cart = () => {
 	//const [cart, setCart] = useCart().cartState
 	const {cart, setCart} = useContext(CartContext)
+	const [auth, setAuth] = useAuth()
 	const [cartTotal, setCartTotal] = useState(0)
 
 	const navigate = useNavigate()
+
+	useEffect(() => {
+		if (auth?.user) {
+			console.log(auth.user)
+			const {name, email, shippingAddress} = auth.user
+		}
+	}, [auth?.user])
 
 	useEffect(() => {
 		let total = 0
@@ -65,6 +74,36 @@ const Cart = () => {
 							Total / Adress / Payments
 							<hr />
 							<h6>Total: ${cartTotal}</h6>
+							{auth?.user?.shippingAddress ? (
+								<>
+									<div className='mb-3'>
+										<hr />
+										<h4>Delivery address:</h4>
+										<h5>{auth?.user?.shippingAddress}</h5>
+									</div>
+									<button
+										className='btn btn-outline-warning'
+										onClick={() => navigate('/dashboard')}
+									>
+										Update address
+									</button>
+								</>
+							) : (
+								<div className='mb-3'>
+									{auth?.token ? (
+										<button
+											className='btn btn-outline-warning'
+											onClick={() => navigate('/dashboard')}
+										>
+											Add delivery address
+										</button>
+									) : (
+										<button className='btn btn-outline-danger mt-3'>
+											Login to checkout
+										</button>
+									)}
+								</div>
+							)}
 						</div>
 						<div className='col-md-1'></div>
 					</div>
