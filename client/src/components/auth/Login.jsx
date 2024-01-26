@@ -27,6 +27,8 @@ const Login = ({closeModal}) => {
 				setAuth({...auth, token: data.token, user: data.user})
 				toast.success('Login successful')
 				closeModal('login')
+				setEmail('')
+				setPassword('')
 				navigate(
 					location.state ||
 						`/dashboard/${data?.user?.admin === true ? 'admin' : ''}`
@@ -45,20 +47,28 @@ const Login = ({closeModal}) => {
 				<div className='row '>
 					<div className='col-md-6' style={{minWidth: '100%'}}>
 						<form onSubmit={handleSubmit}>
-							<input
-								type='email'
-								className='form-control mb-4 p-2'
-								placeholder='Email'
-								value={email}
-								onChange={(e) => setEmail(e.target.value)}
-							/>
-							<input
-								type='password'
-								className='form-control mb-4 p-2'
-								placeholder='Password'
-								value={password}
-								onChange={(e) => setPassword(e.target.value)}
-							/>
+							<div className='form-floating'>
+								<input
+									type='email'
+									className='form-control mb-3 mt-3'
+									placeholder='Email'
+									value={email}
+									onChange={(e) => setEmail(e.target.value)}
+								/>
+								<label className='opacity-50'>Email</label>
+							</div>
+
+							<div className='form-floating'>
+								<input
+									type='password'
+									className='form-control mb-3 mt-3'
+									placeholder='Password'
+									value={password}
+									onChange={(e) => setPassword(e.target.value)}
+								/>
+								<label className='opacity-50'>Password</label>
+							</div>
+
 							<button className='btn btn-primary' type='submit'>
 								Login
 							</button>

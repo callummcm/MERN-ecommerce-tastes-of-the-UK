@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema({
   admin: {
     type: Boolean,
     default: false
+  },
+  shippingAddress: {
+    type: String,
+    trim: true,
   }
 }, { timestamps: true })
 
